@@ -78,7 +78,6 @@ swagger.addValidator(
 		...
 ```
 
-
 ### Current limitations
 
 <li> Only JSON is supported </li>
