@@ -17,24 +17,24 @@
 
 // Include express and swagger in the application.
 var express = require("express")
- , url = require("url")
- , cors = require("cors")
- , app = express()
- , swagger = require("../").createNew(app);
+  , url = require("url")
+  , cors = require("cors")
+  , app = express()
+  , swagger = require("../").createNew(app);
 
 var petResources = require("./resources.js");
 
 
 var corsOptions = {
   credentials: true,
-  origin: function(origin,callback) {
-    if(origin===undefined) {
-      callback(null,false);
+  origin: function (origin, callback) {
+    if (origin === undefined) {
+      callback(null, false);
     } else {
       // change wordnik.com to your allowed domain.
       var match = origin.match("^(.*)?.wordnik.com(\:[0-9]+)?");
-      var allowed = (match!==null && match.length > 0);
-      callback(null,allowed);
+      var allowed = (match !== null && match.length > 0);
+      callback(null, allowed);
     }
   }
 };
@@ -52,7 +52,8 @@ swagger.addValidator(
     if ("POST" == httpMethod || "DELETE" == httpMethod || "PUT" == httpMethod) {
       var apiKey = req.headers["api_key"];
       if (!apiKey) {
-        apiKey = url.parse(req.url,true).query["api_key"]; }
+        apiKey = url.parse(req.url, true).query["api_key"];
+      }
       if ("special-key" == apiKey) {
         return true;
       }
@@ -66,16 +67,16 @@ var models = require("./models.js");
 
 // Add models and methods to swagger
 swagger.addModels(models)
-  .addGet(petResources.findById)
-  .addGet(petResources.findByTags)
-  .addGet(petResources.findByStatus)
+  .addGet(petResources.findByTags)    // - /pet/findByTags
+  .addGet(petResources.findByStatus)  // - /pet/findByStatus
+  .addGet(petResources.findById)      // - /pet/{petId}
   .addPost(petResources.addPet)
   .addPut(petResources.updatePet)
   .addDelete(petResources.deletePet);
 
 swagger.configureDeclaration("pet", {
-  description : "Operations about Pets",
-  authorizations : ["oauth2"],
+  description: "Operations about Pets",
+  authorizations: ["oauth2"],
   produces: ["application/json"]
 });
 
@@ -102,9 +103,9 @@ swagger.configure("http://localhost:8002", "1.0.0");
 
 // Serve up swagger ui at /docs via static route
 var docs_handler = express.static(__dirname + '/../swagger-ui/');
-app.get(/^\/docs(\/.*)?$/, function(req, res, next) {
+app.get(/^\/docs(\/.*)?$/, function (req, res, next) {
   if (req.url === '/docs') { // express static barfs on root url w/o trailing slash
-    res.writeHead(302, { 'Location' : req.url + '/' });
+    res.writeHead(302, {'Location': req.url + '/'});
     res.end();
     return;
   }
@@ -113,14 +114,14 @@ app.get(/^\/docs(\/.*)?$/, function(req, res, next) {
   return docs_handler(req, res, next);
 });
 
-app.get('/throw/some/error', function(){
+app.get('/throw/some/error', function () {
   throw {
     status: 500,
     message: 'we just threw an error for a test case!'
   };
 });
 
-app.use(function(err, req, res, next){
+app.use(function (err, req, res, next) {
   res.send(err.status, err.message);
 });
 
