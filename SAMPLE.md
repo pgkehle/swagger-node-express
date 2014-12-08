@@ -74,7 +74,7 @@ example:
 
 ```js
 swagger.addValidator(
-	function validate(req, path, httpMethod) {
+	function validate(req, path, httpMethod, callback) {
 		...
 ```
 
