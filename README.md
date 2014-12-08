@@ -22,7 +22,7 @@ Using NPM, include the `swagger-node-express` module in your `package.json` depe
 {
 	...
 	"dependencies": {
-		"swagger-node-express": "~2.0",
+    "swagger-node-express-callback": "https://github.com/pgkehle/swagger-node-express-callback/tarball/master",
 		...
 	}
 }
