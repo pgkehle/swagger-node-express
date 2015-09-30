@@ -12,7 +12,6 @@ function handleLogin() {
     var key;
     var defs = auths;
     for(key in defs) {
-      log(key);
       var auth = defs[key];
       if(auth.type === 'oauth2' && auth.scopes) {
         var scope;
@@ -38,9 +37,6 @@ function handleLogin() {
     appName = window.swaggerUi.api.info.title;
   }
 
-  if(popupDialog.length > 0)
-    popupDialog = popupDialog.last();
-  else {
     popupDialog = $(
       [
         '<div class="api-popup-dialog">',
@@ -68,7 +64,6 @@ function handleLogin() {
       str += '</label></li>';
       popup.append(str);
     }
-  }
 
   var $win = $(window),
     dw = $win.width(),
@@ -87,7 +82,10 @@ function handleLogin() {
   popupDialog.find('button.api-popup-cancel').click(function() {
     popupMask.hide();
     popupDialog.hide();
+    popupDialog.empty();
+    popupDialog = [];
   });
+
   popupDialog.find('button.api-popup-authbtn').click(function() {
     popupMask.hide();
     popupDialog.hide();
@@ -95,15 +93,15 @@ function handleLogin() {
     var authSchemes = window.swaggerUi.api.authSchemes;
     var host = window.location;
     var pathname = location.pathname.substring(0, location.pathname.lastIndexOf("/"));
-    var redirectUrl = host.protocol + '//' + host.host + pathname + "/o2c.html";
+    var redirectUrl = host.protocol + '//' + host.host + pathname + '/o2c.html';
     var url = null;
 
     for (var key in authSchemes) {
       if (authSchemes.hasOwnProperty(key)) {
         if(authSchemes[key].type === 'oauth2' && authSchemes[key].flow === 'implicit') {
           var dets = authSchemes[key];
-          url = dets.tokenUrl + "?response_type=token";
-          window.swaggerUi.tokenName = dets.tokenName || "access_token";          
+          url = dets.authorizationUrl + '?response_type=token';
+          window.swaggerUi.tokenName = dets.tokenUrl || 'access_token';          
         }
         else if(authSchemes[key].grantTypes) {
           // 1.2 support
@@ -112,7 +110,7 @@ function handleLogin() {
             if(o.hasOwnProperty(t) && t === 'implicit') {
               var dets = o[t];
               var ep = dets.loginEndpoint.url;
-              url = dets.loginEndpoint.url + "?response_type=token";
+              url = dets.loginEndpoint.url + '?response_type=token';
               window.swaggerUi.tokenName = dets.tokenName;
             }
           }
@@ -123,7 +121,7 @@ function handleLogin() {
     var o = $('.api-popup-scopes').find('input:checked');
 
     for(k =0; k < o.length; k++) {
-      scopes.push($(o[k]).attr("scope"));
+      scopes.push($(o[k]).attr('scope'));
     }
 
     window.enabledScopes=scopes;
@@ -159,14 +157,14 @@ function initOAuth(opts) {
   var o = (opts||{});
   var errors = [];
 
-  appName = (o.appName||errors.push("missing appName"));
+  appName = (o.appName||errors.push('missing appName'));
   popupMask = (o.popupMask||$('#api-common-mask'));
   popupDialog = (o.popupDialog||$('.api-popup-dialog'));
-  clientId = (o.clientId||errors.push("missing client id"));
-  realm = (o.realm||errors.push("missing realm"));
+  clientId = (o.clientId||errors.push('missing client id'));
+  realm = (o.realm||errors.push('missing realm'));
 
   if(errors.length > 0){
-    log("auth unable initialize oauth: " + errors);
+    log('auth unable initialize oauth: ' + errors);
     return;
   }
 
@@ -232,7 +230,7 @@ function onOAuthComplete(token) {
             }
           }
         });
-        window.authorizations.add("oauth2", new ApiKeyAuthorization("Authorization", "Bearer " + b, "header"));
+        window.authorizations.add('oauth2', new ApiKeyAuthorization('Authorization', 'Bearer ' + b, 'header'));
       }
     }
   }

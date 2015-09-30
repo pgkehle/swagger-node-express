@@ -1,5 +1,5 @@
 // swagger-ui.js
-// version 2.1.0-alpha.6
+// version 2.1.0-alpha.7
 $(function() {
 
   // Helper function for vertically aligning DOM elements
@@ -271,7 +271,7 @@ function program1(depth0,data) {
   stack2 = ((stack1 = ((stack1 = depth0.info),stack1 == null || stack1 === false ? stack1 : stack1.description)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1);
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "</div>\n  ";
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.info),stack1 == null || stack1 === false ? stack1 : stack1.termsOfServiceUrl), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.info),stack1 == null || stack1 === false ? stack1 : stack1.termsOfService), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\n  ";
   stack2 = helpers['if'].call(depth0, ((stack1 = depth0.info),stack1 == null || stack1 === false ? stack1 : stack1.contact), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
@@ -286,7 +286,7 @@ function program2(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "<div class=\"info_tos\"><a href=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.info),stack1 == null || stack1 === false ? stack1 : stack1.termsOfServiceUrl)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = depth0.info),stack1 == null || stack1 === false ? stack1 : stack1.termsOfService)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">Terms of service</a></div>";
   return buffer;
   }
@@ -990,7 +990,7 @@ function program4(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n       <textarea class='body-textarea' placeholder='(required)' name='";
+  buffer += "\n				<textarea class='body-textarea required' placeholder='(required)' name='";
   if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -1005,7 +1005,7 @@ function program5(depth0,data) {
 function program7(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n       <textarea class='body-textarea' placeholder='(required)' name='";
+  buffer += "\n				<textarea class='body-textarea required' placeholder='(required)' name='";
   if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -1192,11 +1192,11 @@ function program3(depth0,data) {
   if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">\n        List Operations\n      </a>\n    </li>\n    <li>\n      <a href='#' class=\"expandResource\" data-id=";
+    + "\">\n        List Operations\n      </a>\n    </li>\n    <li>\n      <a href='#' class=\"expandResource\" data-id=\"";
   if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ">\n        Expand Operations\n      </a>\n    </li>\n    ";
+    + "\">\n        Expand Operations\n      </a>\n    </li>\n    ";
   options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
   if (stack1 = helpers.url) { stack1 = stack1.call(depth0, options); }
   else { stack1 = depth0.url; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
@@ -1386,6 +1386,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       return this.api.build();
     };
 
+    SwaggerUi.prototype.collapseAll = function() {
+      return Docs.collapseEndpointListForResource('');
+    };
+
+    SwaggerUi.prototype.listAll = function() {
+      return Docs.collapseOperationsForResource('');
+    };
+
+    SwaggerUi.prototype.expandAll = function() {
+      return Docs.expandOperationsForResource('');
+    };
+
     SwaggerUi.prototype.render = function() {
       var _this = this;
       this.showMessage('Finished Loading Resource Information. Rendering Swagger UI...');
@@ -1397,10 +1409,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       this.showMessage();
       switch (this.options.docExpansion) {
         case "full":
-          Docs.expandOperationsForResource('');
+          this.expandAll();
           break;
         case "list":
-          Docs.collapseOperationsForResource('');
+          this.listAll();
       }
       if (this.options.onComplete) {
         this.options.onComplete(this.api, this);
@@ -1605,9 +1617,21 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       $(this.el).html(Handlebars.templates.main(this.model));
       resources = {};
       counter = 0;
-      _ref3 = this.model.apisArray;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        resource = _ref3[_i];
+
+      // PGK : Sorting alphabetically
+      var _ref3obj = {};
+
+      for (_i = 0, _len = this.model.apisArray.length; _i < _len; _i++) {
+        var a = this.model.apisArray[_i];
+        _ref3obj[a.name] = a;
+      }
+      var keys = Object.keys(_ref3obj);
+      var len = keys.length;
+      keys.sort();
+
+      for (_i = 0; _i < len; _i++) {
+        var k = keys[_i];
+        resource = _ref3obj[k];
         id = resource.name;
         while (typeof resources[id] !== 'undefined') {
           id = id + "_" + counter;
@@ -1773,7 +1797,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
     OperationView.prototype.render = function() {
       var a, auth, auths, code, contentTypeModel, isMethodSubmissionSupported, k, key, o, param, ref, responseContentTypeView, responseSignatureView, schema, schemaObj, signatureModel, statusCode, type, v, value, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref10, _ref11, _ref5, _ref6, _ref7, _ref8, _ref9;
-      isMethodSubmissionSupported = true;
+      isMethodSubmissionSupported = jQuery.inArray(this.model.method, this.model.supportedSubmitMethods()) >= 0;
       if (!isMethodSubmissionSupported) {
         this.model.isReadOnly = true;
       }
@@ -1949,6 +1973,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
           return error_free = false;
         }
       });
+      form.find("textarea.required").each(function() {
+        var _this = this;
+        $(this).removeClass("error");
+        if (jQuery.trim($(this).val()) === "") {
+          $(this).addClass("error");
+          $(this).wiggle({
+            callback: function() {
+              return $(_this).focus();
+            }
+          });
+          return error_free = false;
+        }
+      });
       if (error_free) {
         map = {};
         opts = {
@@ -2032,7 +2069,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
           params += 1;
         }
       }
-      this.invocationUrl = this.model.supportHeaderParams() ? (headerParams = this.model.getHeaderParams(map), this.model.urlify(map, false)) : this.model.urlify(map, true);
+      this.invocationUrl = this.model.supportHeaderParams() ? (headerParams = this.model.getHeaderParams(map), delete headerParams['Content-Type'], this.model.urlify(map, false)) : this.model.urlify(map, true);
       $(".request_url", $(this.el)).html("<pre></pre>");
       $(".request_url pre", $(this.el)).text(this.invocationUrl);
       obj = {
@@ -2262,7 +2299,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
     OperationView.prototype.toggleOperationContent = function() {
       var elem;
-      elem = $('#' + Docs.escapeResourceName(this.model.parentId) + "_" + this.model.nickname + "_content");
+      elem = $('#' + Docs.escapeResourceName(this.model.parentId + "_" + this.model.nickname + "_content"));
       if (elem.is(':visible')) {
         return Docs.collapseOperation(elem);
       } else {
