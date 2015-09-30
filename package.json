@@ -30,7 +30,7 @@
     "request": "~2.36.0",
     "jshint": "~2.3.0"
   },
-  "license": "MIT",
+  "license": "apache 2.0",
   "scripts": {
     "pretest": "jshint lib",
     "test": "mocha -r should './test/**/*.js'",

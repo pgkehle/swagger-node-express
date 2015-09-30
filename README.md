@@ -1,6 +1,15 @@
-# Swagger for Express and Node.js
+# Swagger for Express and Node.js (Callback version)
 
-[![Build Status](https://travis-ci.org/swagger-api/swagger-node-express.png)](https://travis-ci.org/swagger-api/swagger-node-express)
+This is a fork of the [Swagger Node](https://github.com/swagger-api/swagger-node) module for Node.js, which makes use of callbacks instead of returns. 
+
+This project was forked sometime in August(ish) of 2014.  Seems like there are many updates to the original project since then.  Merging in changes from the mainline would be helpful.
+ 
+Please see the original project for more details.
+ 
+Original README contents follow....
+ 
+
+# Swagger for Express and Node.js
 
 This is a [Swagger](https://github.com/swagger-api/swagger-spec) module for the [Express](http://expressjs.com) web application framework for Node.js.
 
@@ -16,13 +25,13 @@ Check out [Swagger-Spec](https://github.com/swagger-api/swagger-spec) for additi
 
 ## Installation
 
-Using NPM, include the `swagger-node-express` module in your `package.json` dependencies.
+Using NPM, include the `swagger-node-express-callback` module in your `package.json` dependencies.
 
 ```json
 {
 	...
 	"dependencies": {
-    "swagger-node-express-callback": "https://github.com/pgkehle/swagger-node-express-callback/tarball/master",
+    "swagger-node-express-callback": "~1.0",
 		...
 	}
 }
