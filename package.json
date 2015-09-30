@@ -1,15 +1,11 @@
 {
   "name": "swagger-node-express-callback",
-  "version": "2.1.4",
-  "author": {
-    "name": "Paul Kehle",
-    "email": "pgkehle@gmail.com",
-    "url": "http://swagger.io"
-  },
+  "version": "1.0.0",
+  "author": "Paul Kehle <pgkehle@gmail.com> (http://swagger.io)",
   "description": "Callback version of Wordnick swagger implementation for the express framework",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pgkehle/swagger-node-express-callback"
+    "url": "git+https://github.com/pgkehle/swagger-node-express-callback.git"
   },
   "keywords": [
     "http",
@@ -34,10 +30,18 @@
     "request": "~2.36.0",
     "jshint": "~2.3.0"
   },
-  "license": "apache 2.0",
+  "license": "MIT",
   "scripts": {
     "pretest": "jshint lib",
     "test": "mocha -r should './test/**/*.js'",
     "start": "node sample-application/app.js"
+  },
+  "bugs": {
+    "url": "https://github.com/pgkehle/swagger-node-express-callback/issues"
+  },
+  "homepage": "https://github.com/pgkehle/swagger-node-express-callback#readme",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   }
 }
