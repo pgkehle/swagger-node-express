@@ -1,6 +1,6 @@
 {
   "name": "swagger-node-express-callback",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Paul Kehle <pgkehle@gmail.com> (http://swagger.io)",
   "description": "Callback version of Wordnick swagger implementation for the express framework",
   "repository": {
